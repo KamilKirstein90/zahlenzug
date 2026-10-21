@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <meta name="theme-color" content="#8fd3ff" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <title>Zahlenzug</title>
+  </head>
+  <body>
+    <div id="app">
+      <div class="scene">
+        <div class="sun"></div>
+        <div class="cloud c1"></div>
+        <div class="cloud c2"></div>
+        <div class="hills"></div>
+        <div class="rails"></div>
+        <div id="train" class="train"></div>
+        <div id="choices" class="choices"></div>
+      </div>
+      <button id="settings-btn" class="settings-btn" aria-label="Einstellungen (gedrückt halten)">⚙</button>
+      <div id="overlay" class="overlay">
+        <button id="play" class="play" aria-label="Spielen">▶</button>
+      </div>
+      <dialog id="settings">
+        <form method="dialog">
+          <h2>Einstellungen</h2>
+          <label>Zahlen
+            <select name="max">
+              <option value="5">1 bis 5</option>
+              <option value="10">1 bis 10</option>
+            </select>
+          </label>
+          <label>Auswahl
+            <select name="choices">
+              <option value="2">2 Waggons</option>
+              <option value="3">3 Waggons</option>
+            </select>
+          </label>
+          <label>Sprache
+            <select name="speech">
+              <option value="1">an</option>
+              <option value="0">aus</option>
+            </select>
+          </label>
+          <button value="save">Fertig</button>
+        </form>
+      </dialog>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

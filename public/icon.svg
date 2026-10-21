@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#8fd3ff"/>
+  <rect y="360" width="512" height="152" fill="#86d46f"/>
+  <g transform="translate(46 120) scale(2.9)">
+    <polygon points="2,92 16,64 16,92" fill="#555"/>
+    <rect x="22" y="14" width="18" height="30" fill="#333"/>
+    <rect x="17" y="10" width="28" height="9" rx="3" fill="#222"/>
+    <rect x="12" y="40" width="80" height="40" rx="12" fill="#e63946" stroke="#a4262f" stroke-width="2"/>
+    <rect x="14" y="54" width="76" height="5" fill="#ffd166"/>
+    <circle cx="62" cy="40" r="9" fill="#ffd166"/>
+    <rect x="86" y="20" width="48" height="60" rx="6" fill="#1d6fd6"/>
+    <rect x="80" y="12" width="60" height="11" rx="4" fill="#123e7a"/>
+    <rect x="96" y="30" width="28" height="22" rx="5" fill="#cdeeff"/>
+    <rect x="6" y="78" width="132" height="8" rx="3" fill="#333"/>
+    <circle cx="36" cy="86" r="12" fill="#333"/>
+    <circle cx="68" cy="86" r="12" fill="#333"/>
+    <circle cx="112" cy="86" r="12" fill="#333"/>
+  </g>
+  <text x="430" y="150" text-anchor="middle" font-family="sans-serif" font-size="110" font-weight="900" fill="#fff" stroke="#1d6fd6" stroke-width="8" paint-order="stroke">1</text>
+</svg>
