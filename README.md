@@ -23,13 +23,25 @@ After the first visit, the game also works without internet.
 
 ## How to play
 
+Before each game the child picks a train from four big picture tiles, each with the flag of its home country and a caption. A voice asks "Wähle deinen Zug aus!" (if the browser blocks speech before the first touch, it is said on the first tap next to the tiles).
+
+| Tile | Train |
+|---|---|
+| Bunter Zug | the colourful steam train |
+| ICE 🇩🇪 | German high-speed train (white with a red stripe) |
+| TGV 🇫🇷 | French high-speed train (orange and green) |
+| Shinkansen 🇯🇵 | Japanese bullet train (white with blue stripes) |
+
+The high-speed wagons keep their livery, but the numbers keep their colours so they still match the dots.
+
+
 | What happens | Game reaction |
 |---|---|
-| Tap ▶ | The locomotive drives in with a toot |
+| Tap a train tile | The voice names the train, the locomotive drives in with a toot |
 | Tap the **right** wagon | It flies to the train, clicks on, the voice says the number ("Drei!"), stars appear |
 | Tap a **wrong** wagon | It wobbles gently with a "boing", no penalty |
 | No tap for 6 s or 2 wrong taps | The right wagon pulses as a hint |
-| Wagon 10 coupled | Fanfare, confetti, the train steams away, ▶ starts a new round |
+| Wagon 10 coupled | Fanfare, confetti, the train drives away, then the train selection appears again |
 
 Each choice wagon shows the number **and the same amount of dots**, so the child can also count.
 
@@ -58,6 +70,6 @@ npm run deploy   # build + publish to GitHub Pages (gh-pages branch)
 |---|---|
 | `src/main.ts` | Screen flow, taps, animations |
 | `src/game.ts` | Settings and choice generation |
-| `src/train.ts` | SVG locomotive and wagons |
+| `src/train.ts` | Train types (flags, captions) and their SVG locomotives and wagons |
 | `src/audio.ts` | Speech and sound effects |
 | `public/` | PWA manifest, service worker, icon |
