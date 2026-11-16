@@ -234,7 +234,7 @@ async function finish() {
   clearInterval(puffs);
   trainEl.classList.remove('driving');
   if (thisRound !== round) return;
-  overlay.classList.remove('hidden');
+  showPicker();
 }
 
 // Before each game the child picks a train: four big picture tiles with flag and name.
@@ -286,7 +286,30 @@ async function choose(t: TrainType, tile: HTMLElement) {
   void startRound();
 }
 
+// Spoken prompt for children who can't read yet. Browsers may block speech before the
+// first touch, so if it didn't play on load it is repeated on the first tap beside the tiles.
+const PROMPT = 'Wähle deinen Zug aus!';
+let promptHeard = false;
+
+function sayPrompt() {
+  const u = say(PROMPT);
+  u?.addEventListener('start', () => (promptHeard = true));
+}
+
+function showPicker() {
+  overlay.classList.remove('hidden');
+  sayPrompt();
+}
+
+overlay.addEventListener('pointerdown', (e) => {
+  if (promptHeard || (e.target as Element).closest('.tile')) return;
+  unlockAudio();
+  sayPrompt();
+});
+
 buildPicker();
+// Voices load asynchronously; wait briefly so the German voice is used for the prompt.
+setTimeout(sayPrompt, 400);
 
 // Parents open the settings by holding the gear button for a second.
 let holdTimer = 0;
