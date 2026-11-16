@@ -1,5 +1,5 @@
 import './style.css';
-import { makeLoco, makeWagon, colorFor } from './train';
+import { makeLoco, makeWagon, colorFor, TRAINS, type TrainType } from './train';
 import { unlockAudio, say, sayNumber, setSpeech, sounds } from './audio';
 import { loadSettings, saveSettings, pickChoices } from './game';
 
@@ -19,6 +19,7 @@ let busy = true;
 let wrongTaps = 0;
 let hintTimer = 0;
 let round = 0;
+let train: TrainType = TRAINS[0];
 
 // Size wagons so the full train always fits, and choice wagons as big as the space allows.
 function layout() {
@@ -48,7 +49,7 @@ async function startRound() {
   choicesEl.innerHTML = '';
   trainEl.innerHTML = '';
   trainEl.getAnimations().forEach((a) => a.cancel());
-  trainEl.append(makeLoco());
+  trainEl.append(makeLoco(train.id));
   trainEl.classList.add('driving');
   sounds.toot();
   await trainEl.animate(
@@ -67,7 +68,7 @@ function showChoices() {
     const btn = document.createElement('button');
     btn.className = 'choice';
     btn.dataset.n = String(n);
-    btn.append(makeWagon(n), dots(n));
+    btn.append(makeWagon(n, train.id), dots(n));
     btn.addEventListener('pointerdown', () => onPick(n, btn));
     btn.animate(
       [{ transform: 'scale(0)', opacity: 0 }, { transform: 'scale(1.1)', offset: 0.7 }, { transform: 'scale(1)', opacity: 1 }],
@@ -106,13 +107,13 @@ async function couple(n: number, btn: HTMLButtonElement) {
     if (other !== btn) other.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 250, fill: 'forwards' });
   }
 
-  const target = makeWagon(n);
+  const target = makeWagon(n, train.id);
   target.style.visibility = 'hidden';
   trainEl.append(target);
   const from = source.getBoundingClientRect();
   const to = target.getBoundingClientRect();
 
-  const flyer = makeWagon(n);
+  const flyer = makeWagon(n, train.id);
   flyer.classList.add('flyer');
   Object.assign(flyer.style, {
     left: `${from.left}px`, top: `${from.top}px`, width: `${from.width}px`, height: `${from.height}px`,
@@ -224,7 +225,7 @@ async function finish() {
   if (thisRound !== round) return;
   sounds.toot();
   trainEl.classList.add('driving');
-  const puffs = setInterval(puff, 220);
+  const puffs = setInterval(() => train.steam && puff(), 220);
   const right = trainEl.getBoundingClientRect().right;
   await trainEl.animate(
     [{ transform: 'translateX(0)' }, { transform: `translateX(${-right - 40}px)` }],
@@ -233,17 +234,82 @@ async function finish() {
   clearInterval(puffs);
   trainEl.classList.remove('driving');
   if (thisRound !== round) return;
-  overlay.classList.remove('hidden');
+  showPicker();
 }
 
-$('#play').addEventListener('click', () => {
+// Before each game the child picks a train: four big picture tiles with flag and name.
+function buildPicker() {
+  const picker = $('#picker');
+  TRAINS.forEach((t, i) => {
+    const tile = document.createElement('button');
+    tile.className = 'tile';
+    tile.setAttribute('role', 'listitem');
+    tile.setAttribute('aria-label', `${t.name} – ${t.country}`);
+    tile.style.setProperty('--accent', t.accent);
+    tile.style.animationDelay = `${i * 0.25}s`;
+
+    const pic = document.createElement('div');
+    pic.className = 'tile-pic';
+    pic.append(makeLoco(t.id), makeWagon(1, t.id));
+
+    const flag = document.createElement('div');
+    flag.className = 'flag';
+    flag.innerHTML = t.flag;
+
+    const label = document.createElement('div');
+    label.className = 'tile-label';
+    label.innerHTML = `<b>${t.name}</b><span>${t.country}</span>`;
+
+    tile.append(flag, pic, label);
+    tile.addEventListener('click', () => choose(t, tile));
+    picker.append(tile);
+  });
+}
+
+let choosing = false;
+async function choose(t: TrainType, tile: HTMLElement) {
+  if (choosing) return;
+  choosing = true;
   unlockAudio();
   document.documentElement.requestFullscreen?.()
     .then(() => (screen.orientation as ScreenOrientation & { lock?: (o: string) => Promise<void> }).lock?.('landscape'))
     .catch(() => {});
+  train = t;
+  sounds.pop();
+  say(t.speech);
+  await tile.animate(
+    [{ transform: 'scale(1)' }, { transform: 'scale(1.15)' }, { transform: 'scale(1)' }],
+    { duration: 450, easing: 'ease-out' },
+  ).finished;
   overlay.classList.add('hidden');
+  choosing = false;
   void startRound();
+}
+
+// Spoken prompt for children who can't read yet. Browsers may block speech before the
+// first touch, so if it didn't play on load it is repeated on the first tap beside the tiles.
+const PROMPT = 'Wähle deinen Zug aus!';
+let promptHeard = false;
+
+function sayPrompt() {
+  const u = say(PROMPT);
+  u?.addEventListener('start', () => (promptHeard = true));
+}
+
+function showPicker() {
+  overlay.classList.remove('hidden');
+  sayPrompt();
+}
+
+overlay.addEventListener('pointerdown', (e) => {
+  if (promptHeard || (e.target as Element).closest('.tile')) return;
+  unlockAudio();
+  sayPrompt();
 });
+
+buildPicker();
+// Voices load asynchronously; wait briefly so the German voice is used for the prompt.
+setTimeout(sayPrompt, 400);
 
 // Parents open the settings by holding the gear button for a second.
 let holdTimer = 0;

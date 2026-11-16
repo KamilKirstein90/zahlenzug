@@ -1,5 +1,5 @@
 // Network first, cache as offline fallback.
-const CACHE = 'zahlenzug-v1';
+const CACHE = 'zahlenzug-v2';
 
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', (e) => e.waitUntil(self.clients.claim()));

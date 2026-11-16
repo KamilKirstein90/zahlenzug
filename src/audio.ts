@@ -20,7 +20,7 @@ function germanVoice(): SpeechSynthesisVoice | undefined {
   return speechSynthesis.getVoices().find((v) => v.lang.toLowerCase().startsWith('de'));
 }
 
-export function say(text: string) {
+export function say(text: string): SpeechSynthesisUtterance | undefined {
   if (!speechOn || !('speechSynthesis' in window)) return;
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
@@ -30,6 +30,7 @@ export function say(text: string) {
   u.rate = 0.9;
   u.pitch = 1.15;
   speechSynthesis.speak(u);
+  return u;
 }
 
 export const sayNumber = (n: number) => say(`${WORDS[n] ?? n}!`);
