@@ -35,7 +35,7 @@ export const TRAINS: TrainType[] = [
   },
   {
     id: 'tgv', name: 'TGV', country: 'Frankreich', speech: 'Der T G V aus Frankreich!',
-    accent: '#3a3f8f', steam: false,
+    accent: '#f07a1a', steam: false,
     flag: `<svg viewBox="0 0 3 2"><rect width="1" height="2" fill="#002654"/><rect x="1" width="1" height="2" fill="#fff"/><rect x="2" width="1" height="2" fill="#ed2939"/></svg>`,
   },
   {
@@ -76,7 +76,7 @@ function wheel(cx: number, cy: number, r: number): string {
 const bogie = (...xs: number[]) => xs.map((x) => wheel(x, 90, 8)).join('');
 
 const TGV_GRADIENT = `<defs><linearGradient id="tgv-stripe">
-  <stop offset="0" stop-color="#8e3fa8"/><stop offset="1" stop-color="#2f6fd0"/></linearGradient></defs>`;
+  <stop offset="0" stop-color="#1f7a3c"/><stop offset="1" stop-color="#5fbf3f"/></linearGradient></defs>`;
 
 const pantograph = `<path d="M94,36 L102,27 L112,31 M97,27 H114" stroke="#555" stroke-width="2.2" fill="none" stroke-linecap="round"/>`;
 
@@ -111,9 +111,9 @@ const LOCOS: Record<TrainId, string> = {
     ${TGV_GRADIENT}${pantograph}
     <rect x="12" y="78" width="126" height="8" rx="3" fill="#555"/>
     <path d="M4,76 C6,58 26,42 62,36 L134,36 Q139,36 139,41 L139,78 L8,78 Q4,78 4,76Z"
-      fill="#e3e6eb" stroke="#8c929c" stroke-width="2"/>
-    <path d="M16,57 C24,47 40,41 62,39 L139,39 L139,56 L16,57 Z" fill="#232a5c"/>
-    <path d="M24,55 C30,48 40,44 54,42 L56,55 Z" fill="#5a6aa8"/>
+      fill="#f47b20" stroke="#b5520c" stroke-width="2"/>
+    <path d="M16,57 C24,47 40,41 62,39 L139,39 L139,56 L16,57 Z" fill="#1f5d36"/>
+    <path d="M24,55 C30,48 40,44 54,42 L56,55 Z" fill="#9fd3b0"/>
     <path d="M9,62 L139,62 L139,69 L7,69 Z" fill="url(#tgv-stripe)"/>
     <ellipse cx="12" cy="66" rx="4" ry="2.4" fill="#fff6b0" stroke="#999"/>
     <rect x="138" y="72" width="4" height="6" fill="#444"/>
@@ -137,9 +137,9 @@ export function makeLoco(train: TrainId = 'bunt'): SVGSVGElement {
 }
 
 // Wagon livery per high-speed train: body, window band and stripe.
-const LIVERY: Record<Exclude<TrainId, 'bunt'>, { body: string; edge: string; windows: string; stripe: string; defs?: string }> = {
+const LIVERY: Record<Exclude<TrainId, 'bunt'>, { body: string; edge: string; windows: string; stripe: string; defs?: string; plate?: boolean }> = {
   ice: { body: '#f7f7f7', edge: '#9aa0a6', windows: '#2b2f36', stripe: '#ec0016' },
-  tgv: { body: '#e3e6eb', edge: '#8c929c', windows: '#232a5c', stripe: 'url(#tgv-stripe)', defs: TGV_GRADIENT },
+  tgv: { body: '#f47b20', edge: '#b5520c', windows: '#1f5d36', stripe: 'url(#tgv-stripe)', defs: TGV_GRADIENT, plate: true },
   shinkansen: { body: '#fbfbfb', edge: '#9aa0a6', windows: '#1f2a44', stripe: '#1d4fa3' },
 };
 
@@ -167,6 +167,7 @@ export function makeWagon(n: number, train: TrainId = 'bunt'): SVGSVGElement {
     <rect x="4" y="32" width="94" height="46" rx="6" fill="${l.body}" stroke="${l.edge}" stroke-width="2"/>
     <rect x="10" y="37" width="82" height="9" rx="3" fill="${l.windows}"/>
     <rect x="5" y="47.5" width="92" height="3.5" fill="${l.stripe}"/>
+    ${l.plate ? '<rect x="27" y="52.5" width="48" height="25" rx="6" fill="#fff"/>' : ''}
     ${number(n, 51, 77, 34, c, shade(c, -0.5))}
     ${bogie(18, 34, 68, 84)}`);
 }
