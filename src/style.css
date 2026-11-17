@@ -107,7 +107,7 @@ html, body {
 .scene[data-theme] .choice { background: rgba(255, 255, 255, 0.78); }
 
 .scene[data-theme="shinkansen"] { --sky1: #9fd4ff; --sky2: #ffe4ef; --grass1: #8fd47a; --grass2: #6cbb5f; }
-.scene[data-theme="shinkansen"] .sun { background: radial-gradient(#ff4d6d, #d7263d 70%); box-shadow: 0 0 5vh #ff9aae; }
+.scene[data-theme="shinkansen"] .sun { display: none; }
 .scene[data-theme="tgv"] { --sky1: #8cc8ff; --sky2: #fff1dc; --grass1: #a9d46a; --grass2: #86b85a; }
 .scene[data-theme="ice"] { --sky1: #86c9f7; --sky2: #e6f3ff; --grass1: #7cc35a; --grass2: #6b9a4a; }
 
