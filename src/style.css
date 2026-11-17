@@ -81,6 +81,24 @@ html, body {
     radial-gradient(ellipse 25% 80% at 92% 100%, #6cc35a 98%, transparent 100%);
 }
 
+/* Country landmarks; "far" sits behind the hills, "near" stands on the horizon in front. */
+.landmarks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.landmark {
+  position: absolute;
+  bottom: 57.5%;
+}
+.landmarks.far .landmark { bottom: 58%; }
+.landmark svg { display: block; height: 100%; width: auto; }
+
+.scene[data-theme="shinkansen"] { --sky1: #9fd4ff; --sky2: #ffe4ef; }
+.scene[data-theme="shinkansen"] .sun { background: radial-gradient(#ff4d6d, #d7263d 70%); box-shadow: 0 0 5vh #ff9aae; }
+.scene[data-theme="tgv"] { --sky1: #8cc8ff; --sky2: #fff1dc; }
+.scene[data-theme="ice"] { --sky1: #86c9f7; --sky2: #e6f3ff; }
+
 .rails {
   position: absolute;
   left: 0;
