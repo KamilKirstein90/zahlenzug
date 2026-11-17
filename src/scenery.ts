@@ -4,7 +4,7 @@ import type { TrainId } from './train';
 
 type Piece = {
   svg: string;
-  left: number; // vw
+  left: number | string; // vw, or any CSS length
   height: number; // vh
   far?: boolean; // drawn behind the hills
 };
@@ -169,10 +169,24 @@ const BALLOON = `<svg viewBox="0 0 40 56">
 
 const BIRD = `<svg viewBox="0 0 24 10"><path class="wings" d="M1,7 Q6,0 12,6 Q18,0 23,7" stroke="#34495e" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`;
 
+// Red sun with soft rays across the sky (viewBox 6:1, sun in the centre).
+const SUNBURST = `<svg viewBox="-600 -100 1200 200">
+  <g fill="#e8384f" opacity=".28">
+    ${Array.from({ length: 16 }, (_, i) => {
+      const a = (i / 16) * Math.PI * 2;
+      const b = a + Math.PI / 16;
+      return `<path d="M0,0 L${Math.cos(a) * 900},${Math.sin(a) * 900} L${Math.cos(b) * 900},${Math.sin(b) * 900} Z"/>`;
+    }).join('')}
+  </g>
+  <circle r="24" fill="#d7263d"/>
+</svg>`;
+
 const PIECES: Record<TrainId, Piece[]> = {
   bunt: [],
   shinkansen: [
-    { svg: FUJI, left: 16, height: 44, far: true },
+    // The sun rises behind the peak: its centre sits over Fuji's summit (Fuji is 2.5× as wide as tall).
+    { svg: SUNBURST, left: 'calc(16vw + 47.5vh - 195vh)', height: 65, far: true },
+    { svg: FUJI, left: 16, height: 38, far: true },
     { svg: BAMBOO, left: 0, height: 20 },
     { svg: CHERRY, left: 8, height: 15 },
     { svg: CHERRY, left: 40, height: 9 },
@@ -269,7 +283,7 @@ export function setScenery(id: TrainId) {
     for (const p of PIECES[id].filter((p) => !!p.far === (layer === 'far'))) {
       const wrap = document.createElement('div');
       wrap.className = 'landmark';
-      wrap.style.left = `${p.left}vw`;
+      wrap.style.left = typeof p.left === 'number' ? `${p.left}vw` : p.left;
       wrap.style.height = `${p.height}vh`;
       wrap.innerHTML = p.svg;
       el.append(wrap);
