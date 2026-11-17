@@ -2,6 +2,7 @@ import './style.css';
 import { makeLoco, makeWagon, colorFor, TRAINS, type TrainType } from './train';
 import { unlockAudio, say, sayNumber, setSpeech, sounds } from './audio';
 import { loadSettings, saveSettings, pickChoices } from './game';
+import { setScenery } from './scenery';
 
 const $ = <T extends HTMLElement>(sel: string) => document.querySelector(sel) as T;
 const trainEl = $('#train');
@@ -281,6 +282,7 @@ async function choose(t: TrainType, tile: HTMLElement) {
     [{ transform: 'scale(1)' }, { transform: 'scale(1.15)' }, { transform: 'scale(1)' }],
     { duration: 450, easing: 'ease-out' },
   ).finished;
+  setScenery(t.id);
   overlay.classList.add('hidden');
   choosing = false;
   void startRound();
